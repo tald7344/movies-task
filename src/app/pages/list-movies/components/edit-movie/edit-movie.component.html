@@ -1,0 +1,82 @@
+<div *ngIf="movieDetails != null && (categories$ | async) as categories">
+    <!-- general form elements -->
+    <div class="container-fluid">
+        <div class="content-header">
+            <h1 class="text-center my-5">Update Movie Page</h1>
+        </div>
+        <div class="card card-info">
+            <div class="card-header bg-sidebar-item-button text-white">
+                <h3 class="card-title mb-0">Update Movie</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form [formGroup]="updateMovieForm" (ngSubmit)="onSubmit()">
+                <div class="card-body">
+                    <div class="form-group">
+                    <label for="exampleInputname1">name</label>
+                    <input type="text"
+                            [ngClass]="{'is-invalid': updateMovieForm.get('name').errors &&
+                                    (updateMovieForm.get('name').touched || updateMovieForm.get('name').dirty)}"
+                            name="name"
+                            formControlName="name"
+                            id="exampleInputname1"
+                            class="form-control"
+                            placeholder="Name">
+                    <span class="invalid-feedback" *ngIf="updateMovieForm.get('name').errors?.required">Name</span>
+                    </div>
+                    <div class="form-group">
+                    <label for="exampleInputdescription">Description</label>
+                    <div class="position-relative">
+                    <input #descriptionField type="description"
+                            [ngClass]="{'is-invalid': updateMovieForm.get('description').errors &&
+                                    (updateMovieForm.get('description').touched || updateMovieForm.get('description').dirty)}"
+                            name="description"
+                            formControlName="description"
+                            id="exampleInputdescription"
+                            class="form-control"
+                            placeholder="Movie Description">
+                    </div>
+                    <span class="invalid-feedback" *ngIf="updateMovieForm.get('description').errors?.required">Description is required</span>
+                    </div>
+                    <div class="form-group">
+                    <label for="exampleInputEmail">Category</label>
+                    <select name="category_id"
+                            class="form-control"
+                            formControlName="category_id"
+                            id="exampleInputcategory_id"
+                            [ngClass]="{'is-invalid': updateMovieForm.get('category_id').errors &&
+                            (updateMovieForm.get('category_id').touched || updateMovieForm.get('category_id').dirty)}">
+                        <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+                    </select>      
+                    <span class="invalid-feedback" *ngIf="updateMovieForm.get('category_id').errors?.required">Category field is required</span>
+                    </div>
+                    <div class="form-group">
+                    <label for="exampleInputupload">upload</label>
+                    <div class="input-group input-group-custom">
+                        <div class="custom-file">
+                        <input #imageInput type="file" accept="image/*" class="custom-file-input" id="file-input"
+                                (change)="updateName(imageInput)">
+                        <label class="custom-file-label" for="file-input">{{imageName}}</label>
+                        </div>
+                        <div class="input-group-append">
+                        <button class="btn btn-success" type="button" (click)="processFile(imageInput)" [disabled]=!fileSelected>
+                            {{uploadButtonValue}}
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn bg-sidebar-item-button text-white" [disabled]="updateMovieForm.invalid || isSubmited">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+<div *ngIf="movieDetails == null && !(categories$ | async)">
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
